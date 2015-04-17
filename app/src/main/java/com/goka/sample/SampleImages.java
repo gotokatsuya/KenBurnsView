@@ -1,4 +1,4 @@
-package com.goka.kenburnsview;
+package com.goka.sample;
 
 /*******************************************************************************
  * Copyright 2011-2013 Sergey Tarasevich
@@ -23,14 +23,9 @@ import java.lang.String;
  */
 public final class SampleImages {
 
-    public static final String[] IMAGES1 = new String[]{
-            // Light images
-            "http://tabletpcssource.com/wp-content/uploads/2011/05/android-logo.png"
-    };
 
     public static final String[] IMAGES20 = new String[] {
             // Light images
-            "http://tabletpcssource.com/wp-content/uploads/2011/05/android-logo.png",
             "http://simpozia.com/pages/images/stories/windows-icon.png",
             "http://radiotray.sourceforge.net/radio.png",
             "http://www.bandwidthblog.com/wp-content/uploads/2011/11/twitter-logo.png",

@@ -1,4 +1,4 @@
-package com.goka.kenburnsview;
+package com.goka.sample;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

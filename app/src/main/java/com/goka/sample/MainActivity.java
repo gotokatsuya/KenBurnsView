@@ -1,17 +1,19 @@
-package com.goka.kenburnsview;
+package com.goka.sample;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.goka.library.KenBurnsView;
+import com.goka.library.LoopViewPager;
+
 import java.util.Arrays;
 import java.util.List;
 
-import com.goka.kenburnsview.*;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     /**
      * Called when the activity is first created.
@@ -31,7 +33,6 @@ public class MainActivity extends ActionBarActivity {
         final KenBurnsView kenBurnsView = (KenBurnsView)findViewById(R.id.ken_burns_view);
         //kenBurnsView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         kenBurnsView.initUrls(urls);
-
 
         //LoopViewListener
         LoopViewPager.LoopViewPagerListener listener = new LoopViewPager.LoopViewPagerListener() {
@@ -57,7 +58,6 @@ public class MainActivity extends ActionBarActivity {
         viewPagerFrame.addView(loopViewPager);
 
         kenBurnsView.setPager(loopViewPager);
-
     }
 
 }
