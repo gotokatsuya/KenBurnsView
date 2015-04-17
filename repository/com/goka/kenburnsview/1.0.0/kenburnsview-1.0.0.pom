@@ -13,5 +13,11 @@
       <version>22.0.0</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.bumptech.glide</groupId>
+      <artifactId>glide</artifactId>
+      <version>3.5.2</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>

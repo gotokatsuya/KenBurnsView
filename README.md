@@ -13,6 +13,5 @@ Android ImageViews animated by Ken Burns Effect.
 [youtube](http://youtu.be/G2gJfT4tdnw)
 
 
-
 ## Libs
-
+[Glide]https://github.com/bumptech/glide
