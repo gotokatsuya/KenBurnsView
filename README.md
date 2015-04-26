@@ -43,6 +43,8 @@ private void kenburnsviewInitialize(){
     kenBurnsView.setPager(loopViewPager);
 }
 ```
+You should check [sample code](https://github.com/gotokatsuya/KenBurnsView/blob/master/app/src/main/java/com/goka/sample/MainActivity.java).
+
 
 
 ## Gradle
@@ -57,10 +59,6 @@ dependencies {
     compile 'com.goka:kenburnsview:1.0.0'
 }
 ```
-
-
-You should check [sample code](https://github.com/gotokatsuya/KenBurnsView/blob/master/app/src/main/java/com/goka/sample/MainActivity.java)
-
 
 ## iOS
 [CPKenburnsSlideshowView](https://github.com/muukii0803/CPKenburnsSlideshowView)
