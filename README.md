@@ -3,6 +3,10 @@ KenBurnsView
 
 Android ImageViews animated by Ken Burns Effect.
 
+![](https://img.shields.io/badge/Android%20Arsenal-KenBurnsView-brightgreen.svg?style=flat)
+
+
+## Demo
 ![Demo](https://github.com/gotokatsuya/KenBurnsView/blob/master/demo.gif)
 
 
