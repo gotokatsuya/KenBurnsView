@@ -10,13 +10,11 @@ Android ImageViews animated by Ken Burns Effect.
 
 ```
 repositories {
-    maven {
-        url 'http://raw.github.com/gotokatsuya/KenBurnsView/master/repository/'
-    }
+    jcenter()
 }
 
 dependencies {
-    compile 'com.goka:kenburnsview:1.0.0'
+    compile 'com.github.goka.kenburnsview:library:1.0.0'
 }
 ```
 

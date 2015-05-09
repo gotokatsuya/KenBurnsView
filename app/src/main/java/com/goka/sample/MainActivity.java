@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.goka.library.KenBurnsView;
-import com.goka.library.LoopViewPager;
+import com.goka.kenburnsview.KenBurnsView;
+import com.goka.kenburnsview.LoopViewPager;
 
 import java.util.Arrays;
 import java.util.List;

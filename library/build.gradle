@@ -1,4 +1,25 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+        classpath 'com.github.dcendents:android-maven-plugin:1.2'
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+group = 'com.github.goka.kenburnsview'
+version = '1.0.0'
+
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 22
@@ -18,28 +39,84 @@ android {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.github.bumptech.glide:glide:3.5.2'
     compile 'com.android.support:support-v4:22.0.0'
 }
 
-def repo = new File(rootDir, "repository")
+def siteUrl = 'https://github.com/gotokatsuya/KenBurnsView'
+def gitUrl = 'https://github.com/gotokatsuya/KenBurnsView.git'
 
-apply plugin: 'maven'
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository url: "file://${repo.absolutePath}"
-            pom.version = '1.0.0'
-            pom.groupId = 'com.goka'
-            pom.artifactId = 'kenburnsview'
+bintray {
+    user = properties.getProperty('bintray.user')
+    key = properties.getProperty('bintray.key')
+
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = 'KenBurnsView'
+        websiteUrl = siteUrl
+        issueTrackerUrl = 'https://github.com/gotokatsuya/KenBurnsView/issues'
+        vcsUrl = gitUrl
+        licenses = ['Apache-2.0']
+        labels = ['Android']
+        publicDownloadNumbers = true
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'KenBurnsView'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id properties.getProperty('bintray.id')
+                        name properties.getProperty('bintray.name')
+                        email properties.getProperty('bintray.email')
+                    }
+                }
+                scm {
+                    connection 'https://github.com/gotokatsuya/KenBurnsView.git'
+                    developerConnection 'https://github.com/gotokatsuya/KenBurnsView.git'
+                    url siteUrl
+                }
+            }
         }
     }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+task findConventions << {
+    println project.getConvention()
 }

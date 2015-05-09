@@ -1,4 +1,4 @@
-package com.goka.library;
+package com.goka.kenburnsview;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
