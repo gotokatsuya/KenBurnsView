@@ -77,7 +77,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.goka.kenburnsview:library:1.0.1'
+    compile 'com.github.goka.kenburnsview:library:1.0.2'
 }
 ```
 
@@ -85,6 +85,9 @@ dependencies {
 ### 1.0.1
 Enable to load images from res.  
 Enable to mix. (Enable to load images from url & res)
+
+### 1.0.2
+Fix a little issue. (Forgot to initialize a size)
 
 
 ## iOS
