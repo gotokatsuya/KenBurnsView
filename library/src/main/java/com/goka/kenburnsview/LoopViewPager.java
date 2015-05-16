@@ -12,14 +12,21 @@ import android.view.ViewGroup;
 public class LoopViewPager extends ViewPager {
 
     private static final int ALL_PAGE_COUNT = 100000;
+
     private int mPages;
+
     private int mFirstPosition;
+
     private int mCurrentPage;
+
     private int mAdapterPages;
+
     private LoopViewPagerListener mListener;
+
     private LoopOnPageChangeListener mOnPageChangeListener;
 
     public interface LoopViewPagerListener {
+
         public View OnInstantiateItem(int page);
 
         public void onPageScrollChanged(int page);
@@ -86,6 +93,7 @@ public class LoopViewPager extends ViewPager {
     }
 
     private class LoopOnPageChangeListener implements OnPageChangeListener {
+
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             mListener.onPageScroll(position, positionOffset, positionOffsetPixels);
@@ -110,6 +118,7 @@ public class LoopViewPager extends ViewPager {
     }
 
     private class LoopPagerAdapter extends PagerAdapter {
+
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View v = mListener.OnInstantiateItem(pos2page(position));

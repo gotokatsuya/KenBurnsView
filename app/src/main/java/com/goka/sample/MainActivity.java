@@ -22,19 +22,29 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        init();
+
+        initializeKenBurnsView();
     }
 
-    private void init(){
-        //Get urls
-        List<String> urls = Arrays.asList(SampleImages.IMAGES20);
 
-        //KenBurnsView
-        final KenBurnsView kenBurnsView = (KenBurnsView)findViewById(R.id.ken_burns_view);
-        //kenBurnsView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        kenBurnsView.initUrls(urls);
+    private void initializeKenBurnsView() {
+        // KenBurnsView
+        final KenBurnsView kenBurnsView = (KenBurnsView) findViewById(R.id.ken_burns_view);
+        // kenBurnsView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        //LoopViewListener
+        // File path, or a uri or url
+        List<String> urls = Arrays.asList(SampleImages.IMAGES_URL);
+        kenBurnsView.initStrings(urls);
+
+        // ResourceID
+        //List<Integer> resourceIDs = Arrays.asList(SampleImages.IMAGES_RESOURCE);
+        //kenBurnsView.initResourceIDs(resourceIDs);
+
+        // MIX (String & Integer)
+        //List<Object> mixingList = Arrays.asList(SampleImages.IMAGES_MIX);
+        //kenBurnsView.initMixing(mixingList);
+
+        // LoopViewListener
         LoopViewPager.LoopViewPagerListener listener = new LoopViewPager.LoopViewPagerListener() {
             @Override
             public View OnInstantiateItem(int page) {
@@ -42,19 +52,30 @@ public class MainActivity extends Activity {
                 counterText.setText(page + "");
                 return counterText;
             }
+
             @Override
-            public void onPageScroll(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScroll(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
             @Override
             public void onPageSelected(int position) {
                 kenBurnsView.forceSelected(position);
             }
+
             @Override
-            public void onPageScrollChanged(int page){}
+            public void onPageScrollChanged(int page) {
+            }
         };
 
-        //LoopView
+        // LoopView
         LoopViewPager loopViewPager = new LoopViewPager(this, urls.size(), listener);
-        FrameLayout viewPagerFrame = (FrameLayout)findViewById(R.id.view_pager_frame);
+
+        //LoopViewPager loopViewPager = new LoopViewPager(this, resourceIDs.size(), listener);
+
+        //LoopViewPager loopViewPager = new LoopViewPager(this, mixingList.size(), listener);
+
+
+        FrameLayout viewPagerFrame = (FrameLayout) findViewById(R.id.view_pager_frame);
         viewPagerFrame.addView(loopViewPager);
 
         kenBurnsView.setPager(loopViewPager);

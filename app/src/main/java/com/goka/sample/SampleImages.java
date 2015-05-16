@@ -1,30 +1,25 @@
 package com.goka.sample;
 
-/*******************************************************************************
- * Copyright 2011-2013 Sergey Tarasevich
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
-
 import java.lang.String;
 
-/**
- * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
- */
 public final class SampleImages {
 
+    public static final Object[] IMAGES_MIX = new Object[]{
+            "http://www.bandwidthblog.com/wp-content/uploads/2011/11/twitter-logo.png",
+            R.drawable.sample_1,
+            "http://cdn.geekwire.com/wp-content/uploads/2011/04/firefox.png?7794fe",
+            R.drawable.sample_2,
+            "http://weloveicons.s3.amazonaws.com/icons/100929_applications.png",
+            R.drawable.sample_3
+    };
 
-    public static final String[] IMAGES20 = new String[] {
+    public static final Integer[] IMAGES_RESOURCE = new Integer[]{
+            R.drawable.sample_1,
+            R.drawable.sample_2,
+            R.drawable.sample_3
+    };
+
+    public static final String[] IMAGES_URL = new String[]{
             // Light images
             "http://simpozia.com/pages/images/stories/windows-icon.png",
             "http://radiotray.sourceforge.net/radio.png",
@@ -34,7 +29,6 @@ public final class SampleImages {
             "http://www.idyllicmusic.com/index_files/get_apple-iphone.png",
             "http://www.frenchrevolutionfood.com/wp-content/uploads/2009/04/Twitter-Bird.png",
             "http://3.bp.blogspot.com/-ka5MiRGJ_S4/TdD9OoF6bmI/AAAAAAAAE8k/7ydKtptUtSg/s1600/Google_Sky%2BMaps_Android.png",
-            "http://www.desiredsoft.com/images/icon_webhosting.png",
             "http://goodereader.com/apps/wp-content/uploads/downloads/thumbnails/2012/01/hi-256-0-99dda8c730196ab93c67f0659d5b8489abdeb977.png",
             "http://1.bp.blogspot.com/-mlaJ4p_3rBU/TdD9OWxN8II/AAAAAAAAE8U/xyynWwr3_4Q/s1600/antivitus_free.png",
             "http://cdn3.iconfinder.com/data/icons/transformers/computer.png",

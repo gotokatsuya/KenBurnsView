@@ -21,30 +21,53 @@ import java.util.Random;
  */
 public class KenBurnsView extends FrameLayout {
 
-    private static final int NUM_OF_IMAGES = 3;
+    private enum LoadType {
+        String,      // A file path, or a uri or url (default)
+        ResourceID,  // The id of the resource containing the image
+        MIXING       // String & Resource
+    }
+
+    private LoadType mLoadType = LoadType.String;
+
+    private static final int NUM_OF_IMAGE_VIEWS = 3;
+
     private static final String PROPERTY_ALPHA = "alpha";
 
     private final Handler mHandler;
+
     private Context mContext;
 
     private ImageView[] mImageViews;
+
     private FrameLayout mRootLayout;
 
     private final Random mRandom = new Random();
+
     private int mSwapMs = 5500;
+
     private int mFadeInOutMs = 500;
 
     private float maxScaleFactor = 1.5F;
+
     private float minScaleFactor = 1.0F;
 
     private int mPosition = 0;
+
     private int mPreviousPosition = 0;
+
     private int mActiveImageIndex = -1;
 
-    private List<String> mUrls;
+    private List<String> mStrings;
+
+    private List<Integer> mResourceIDs;
+
+    private List<Object> mMixingList;
+
     private LoopViewPager mLoopViewPager;
 
     private ImageView.ScaleType mScaleType = null;
+
+    private static int sCachedSizeForLoadType = 0;
 
 
     public KenBurnsView(Context context) {
@@ -99,11 +122,11 @@ public class KenBurnsView extends FrameLayout {
             mActiveImageIndex = swapDirection(mActiveImageIndex, false);
         }
 
-        if (mPreviousPosition == 0 && mPosition == mUrls.size() - 1) {
+        if (mPreviousPosition == 0 && mPosition == getSizeByLoadType() - 1) {
             mActiveImageIndex = swapDirection(mActiveImageIndex, true);
         }
 
-        if (mPreviousPosition == mUrls.size() - 1 && mPosition == 0) {
+        if (mPreviousPosition == getSizeByLoadType() - 1 && mPosition == 0) {
             mActiveImageIndex = swapDirection(mActiveImageIndex, false);
         }
 
@@ -175,7 +198,7 @@ public class KenBurnsView extends FrameLayout {
         if (mLoopViewPager != null) {
             mPosition++;
 
-            if (mPosition >= mUrls.size()) {
+            if (mPosition >= getSizeByLoadType()) {
                 mPosition = 0;
             }
 
@@ -199,7 +222,8 @@ public class KenBurnsView extends FrameLayout {
         animatorSet.start();
     }
 
-    private void start(View view, long duration, float fromScale, float toScale, float fromTranslationX, float fromTranslationY, float toTranslationX, float toTranslationY) {
+    private void start(View view, long duration, float fromScale, float toScale, float fromTranslationX,
+            float fromTranslationY, float toTranslationX, float toTranslationY) {
         view.setScaleX(fromScale);
         view.setScaleY(fromScale);
         view.setTranslationX(fromTranslationX);
@@ -228,7 +252,8 @@ public class KenBurnsView extends FrameLayout {
         float fromTranslationY = pickTranslation(view.getHeight(), fromScale);
         float toTranslationX = pickTranslation(view.getWidth(), toScale);
         float toTranslationY = pickTranslation(view.getHeight(), toScale);
-        start(view, this.mSwapMs, fromScale, toScale, fromTranslationX, fromTranslationY, toTranslationX, toTranslationY);
+        start(view, this.mSwapMs, fromScale, toScale, fromTranslationX, fromTranslationY, toTranslationX,
+                toTranslationY);
     }
 
     @Override
@@ -279,18 +304,35 @@ public class KenBurnsView extends FrameLayout {
         mRootLayout = (FrameLayout) view.findViewById(R.id.ken_burns_root);
     }
 
-    public void initUrls(List<String> urls) {
-        mUrls = urls;
+    public void initStrings(List<String> strings) {
+        mLoadType = LoadType.String;
+        mStrings = strings;
         if (mRootLayout != null) {
-            initImages(mRootLayout);
+            initImageViews(mRootLayout);
         }
     }
 
-    private void initImages(FrameLayout root) {
+    public void initResourceIDs(List<Integer> resourceIDs) {
+        mLoadType = LoadType.ResourceID;
+        mResourceIDs = resourceIDs;
+        if (mRootLayout != null) {
+            initImageViews(mRootLayout);
+        }
+    }
 
-        mImageViews = new ImageView[NUM_OF_IMAGES];
+    public void initMixing(List<Object> mixingList) {
+        mLoadType = LoadType.MIXING;
+        mMixingList = mixingList;
+        if (mRootLayout != null) {
+            initImageViews(mRootLayout);
+        }
+    }
 
-        for (int i = NUM_OF_IMAGES - 1; i >= 0; i--) {
+    private void initImageViews(FrameLayout root) {
+
+        mImageViews = new ImageView[NUM_OF_IMAGE_VIEWS];
+
+        for (int i = NUM_OF_IMAGE_VIEWS - 1; i >= 0; i--) {
             mImageViews[i] = new ImageView(mContext);
 
             if (i != 0) {
@@ -300,7 +342,9 @@ public class KenBurnsView extends FrameLayout {
             if (mScaleType != null) {
                 mImageViews[i].setScaleType(mScaleType);
             }
-            mImageViews[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+            mImageViews[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
 
             root.addView(mImageViews[i]);
         }
@@ -313,40 +357,81 @@ public class KenBurnsView extends FrameLayout {
     }
 
     private void loadImage(final int activeIndex, final int position) {
-        Glide.with(mContext).load(mUrls.get(position)).into(mImageViews[activeIndex]);
+        loadByGlide(position, activeIndex);
 
-        int prePosition = position - 1;
+        int prePosition  = position - 1;
         int nextPosition = position + 1;
 
         if (prePosition < 0) {
-            prePosition = mUrls.size() - 1;
+            prePosition = getSizeByLoadType() - 1;
         }
 
-        if (nextPosition > mUrls.size() - 1) {
+        if (nextPosition > getSizeByLoadType() - 1) {
             nextPosition = 0;
         }
 
         if (activeIndex == 0) {
             if (position != prePosition) {
-                Glide.with(mContext).load(mUrls.get(prePosition)).into(mImageViews[2]);
+                loadByGlide(prePosition, 2);
             }
             if (position != nextPosition) {
-                Glide.with(mContext).load(mUrls.get(nextPosition)).into(mImageViews[1]);
+                loadByGlide(nextPosition, 1);
             }
         } else if (activeIndex == 1) {
             if (position != prePosition) {
-                Glide.with(mContext).load(mUrls.get(prePosition)).into(mImageViews[0]);
+                loadByGlide(prePosition, 0);
             }
             if (position != nextPosition) {
-                Glide.with(mContext).load(mUrls.get(nextPosition)).into(mImageViews[2]);
+                loadByGlide(nextPosition, 2);
             }
         } else if (activeIndex == 2) {
             if (position != prePosition) {
-                Glide.with(mContext).load(mUrls.get(prePosition)).into(mImageViews[1]);
+                loadByGlide(prePosition, 1);
             }
             if (position != nextPosition) {
-                Glide.with(mContext).load(mUrls.get(nextPosition)).into(mImageViews[0]);
+                loadByGlide(nextPosition, 0);
             }
+        }
+    }
+
+    private int getSizeByLoadType() {
+
+        if (sCachedSizeForLoadType > 0) {
+            return sCachedSizeForLoadType;
+        }
+
+        switch (mLoadType) {
+            case String:
+                sCachedSizeForLoadType = mStrings.size();
+                break;
+            case ResourceID:
+                sCachedSizeForLoadType = mResourceIDs.size();
+                break;
+            case MIXING:
+                sCachedSizeForLoadType = mMixingList.size();
+                break;
+        }
+        return sCachedSizeForLoadType;
+    }
+
+    private void loadByGlide(final int position, final int imageIndex) {
+        switch (mLoadType) {
+            case String:
+                Glide.with(mContext).load(mStrings.get(position)).into(mImageViews[imageIndex]);
+                break;
+            case ResourceID:
+                Glide.with(mContext).load(mResourceIDs.get(position)).into(mImageViews[imageIndex]);
+                break;
+            case MIXING:
+                Object object = mMixingList.get(position);
+                if (object.getClass() == String.class) {
+                    String string = (String) object;
+                    Glide.with(mContext).load(string).into(mImageViews[imageIndex]);
+                } else if (object.getClass() == Integer.class) {
+                    Integer integer = (Integer) object;
+                    Glide.with(mContext).load(integer).into(mImageViews[imageIndex]);
+                }
+                break;
         }
     }
 }
