@@ -1,7 +1,7 @@
 KenBurnsView
 ============
 
-Android ImageViews animated by Ken Burns Effect.
+Android ImageViews are animated by Ken Burns Effect.
 
 ![](https://img.shields.io/badge/Android%20Arsenal-KenBurnsView-brightgreen.svg?style=flat)
 
