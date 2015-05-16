@@ -306,7 +306,7 @@ public class KenBurnsView extends FrameLayout {
 
     public void initStrings(List<String> strings) {
         mLoadType = LoadType.String;
-        sCachedSizeForLoadType = 0
+        sCachedSizeForLoadType = 0;
         mStrings = strings;
         if (mRootLayout != null) {
             initImageViews(mRootLayout);
@@ -315,7 +315,7 @@ public class KenBurnsView extends FrameLayout {
 
     public void initResourceIDs(List<Integer> resourceIDs) {
         mLoadType = LoadType.ResourceID;
-        sCachedSizeForLoadType = 0
+        sCachedSizeForLoadType = 0;
         mResourceIDs = resourceIDs;
         if (mRootLayout != null) {
             initImageViews(mRootLayout);
@@ -324,7 +324,7 @@ public class KenBurnsView extends FrameLayout {
 
     public void initMixing(List<Object> mixingList) {
         mLoadType = LoadType.MIXING;
-        sCachedSizeForLoadType = 0
+        sCachedSizeForLoadType = 0;
         mMixingList = mixingList;
         if (mRootLayout != null) {
             initImageViews(mRootLayout);
