@@ -83,7 +83,7 @@ dependencies {
 
 ## Release
 ### 1.0.1
-Enable to load images from res.
+Enable to load images from res.  
 Enable to mix. (Enable to load images from url & res)
 
 
