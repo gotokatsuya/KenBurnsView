@@ -25,7 +25,7 @@ private void initializeKenBurnsView(){
     //List<Integer> resourceIDs = Arrays.asList(SampleImages.IMAGES_RESOURCE);
     //kenBurnsView.initResourceIDs(resourceIDs);
 
-    // MIX (String & Integer)
+    // MIX (url & id)
     //List<Object> mixingList = Arrays.asList(SampleImages.IMAGES_MIX);
     //kenBurnsView.initMixing(mixingList);
 
@@ -77,17 +77,22 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.goka.kenburnsview:library:1.0.2'
+    compile 'com.github.goka.kenburnsview:library:1.0.3'
 }
 ```
 
+
 ## Release
-### 1.0.1
-Enable to load images from res.  
-Enable to mix. (Enable to load images from url & res)
+
+### 1.0.3
+Delete unneeded resources.
 
 ### 1.0.2
-Fix a little issue. (Forgot to initialize a size)
+Fix initializing size.
+
+### 1.0.1
+Enable to load images from res.
+Enable to mix. (Enable to load images from url & res)
 
 
 ## iOS
