@@ -27,13 +27,13 @@ public class LoopViewPager extends ViewPager {
 
     public interface LoopViewPagerListener {
 
-        public View OnInstantiateItem(int page);
+        View OnInstantiateItem(int page);
 
-        public void onPageScrollChanged(int page);
+        void onPageScrollChanged(int page);
 
-        public void onPageScroll(int position, float positionOffset, int positionOffsetPixels);
+        void onPageScroll(int position, float positionOffset, int positionOffsetPixels);
 
-        public void onPageSelected(int position);
+        void onPageSelected(int position);
     }
 
     public LoopViewPager(Context context, int pages, LoopViewPagerListener listener) {
@@ -59,7 +59,7 @@ public class LoopViewPager extends ViewPager {
 
         mListener = listener;
         mOnPageChangeListener = new LoopOnPageChangeListener();
-        setOnPageChangeListener(mOnPageChangeListener);
+        addOnPageChangeListener(mOnPageChangeListener);
     }
 
     @Override
@@ -69,12 +69,12 @@ public class LoopViewPager extends ViewPager {
     }
 
     public void setCurrentItemAfterCancelListener(int item, boolean smoothScroll) {
-        setOnPageChangeListener(null);
+        removeOnPageChangeListener(mOnPageChangeListener);
 
         int pos = item < 0 ? mFirstPosition : mFirstPosition + item;
         super.setCurrentItem(pos, smoothScroll);
 
-        setOnPageChangeListener(mOnPageChangeListener);
+        addOnPageChangeListener(mOnPageChangeListener);
     }
 
     @Override
@@ -84,12 +84,12 @@ public class LoopViewPager extends ViewPager {
     }
 
     public void setCurrentItemAfterCancelListener(int item) {
-        setOnPageChangeListener(null);
+        removeOnPageChangeListener(mOnPageChangeListener);
 
         int pos = item < 0 ? mFirstPosition : mFirstPosition + item;
         super.setCurrentItem(pos);
 
-        setOnPageChangeListener(mOnPageChangeListener);
+        addOnPageChangeListener(mOnPageChangeListener);
     }
 
     private class LoopOnPageChangeListener implements OnPageChangeListener {
@@ -128,7 +128,7 @@ public class LoopViewPager extends ViewPager {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            ((ViewPager) container).removeView((View) object);
+            container.removeView((View) object);
         }
 
         @Override

@@ -19,22 +19,22 @@ private void initializeKenBurnsView(){
 
     // File path, or a uri or url
     List<String> urls = Arrays.asList(SampleImages.IMAGES_URL);
-    kenBurnsView.initStrings(urls);
+    kenBurnsView.loadStrings(urls);
 
     // ResourceID
     //List<Integer> resourceIDs = Arrays.asList(SampleImages.IMAGES_RESOURCE);
-    //kenBurnsView.initResourceIDs(resourceIDs);
+    //kenBurnsView.loadResourceIDs(resourceIDs);
 
     // MIX (url & id)
     //List<Object> mixingList = Arrays.asList(SampleImages.IMAGES_MIX);
-    //kenBurnsView.initMixing(mixingList);
+    //kenBurnsView.loadMixing(mixingList);
 
     // LoopViewListener
     LoopViewPager.LoopViewPagerListener listener = new LoopViewPager.LoopViewPagerListener() {
         @Override
         public View OnInstantiateItem(int page) {
             TextView counterText = new TextView(getApplicationContext());
-            counterText.setText(page + "");
+            counterText.setText(String.valueOf(page));
             return counterText;
         }
 

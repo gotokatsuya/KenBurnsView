@@ -3,7 +3,9 @@ package com.goka.sample;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.goka.kenburnsview.KenBurnsView;
@@ -21,6 +23,7 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         initializeKenBurnsView();
@@ -30,26 +33,20 @@ public class MainActivity extends Activity {
     private void initializeKenBurnsView() {
         // KenBurnsView
         final KenBurnsView kenBurnsView = (KenBurnsView) findViewById(R.id.ken_burns_view);
-        // kenBurnsView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        kenBurnsView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        kenBurnsView.setSwapMs(3750);
+        kenBurnsView.setFadeInOutMs(750);
 
-        // File path, or a uri or url
-        List<String> urls = Arrays.asList(SampleImages.IMAGES_URL);
-        kenBurnsView.initStrings(urls);
-
-        // ResourceID
-        //List<Integer> resourceIDs = Arrays.asList(SampleImages.IMAGES_RESOURCE);
-        //kenBurnsView.initResourceIDs(resourceIDs);
-
-        // MIX (String & Integer)
-        //List<Object> mixingList = Arrays.asList(SampleImages.IMAGES_MIX);
-        //kenBurnsView.initMixing(mixingList);
+        // ResourceIDs
+        List<Integer> resourceIDs = Arrays.asList(SampleImages.IMAGES_RESOURCE);
+        kenBurnsView.loadResourceIDs(resourceIDs);
 
         // LoopViewListener
         LoopViewPager.LoopViewPagerListener listener = new LoopViewPager.LoopViewPagerListener() {
             @Override
             public View OnInstantiateItem(int page) {
                 TextView counterText = new TextView(getApplicationContext());
-                counterText.setText(page + "");
+                counterText.setText(String.valueOf(page));
                 return counterText;
             }
 
@@ -68,12 +65,7 @@ public class MainActivity extends Activity {
         };
 
         // LoopView
-        LoopViewPager loopViewPager = new LoopViewPager(this, urls.size(), listener);
-
-        //LoopViewPager loopViewPager = new LoopViewPager(this, resourceIDs.size(), listener);
-
-        //LoopViewPager loopViewPager = new LoopViewPager(this, mixingList.size(), listener);
-
+        LoopViewPager loopViewPager = new LoopViewPager(this, resourceIDs.size(), listener);
 
         FrameLayout viewPagerFrame = (FrameLayout) findViewById(R.id.view_pager_frame);
         viewPagerFrame.addView(loopViewPager);

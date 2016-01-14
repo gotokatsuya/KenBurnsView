@@ -31,6 +31,10 @@ public class KenBurnsView extends FrameLayout {
 
     private static final int NUM_OF_IMAGE_VIEWS = 3;
 
+    private static final int FIRST_IMAGE_VIEW_INDEX = 0;
+    private static final int SECOND_IMAGE_VIEW_INDEX = 1;
+    private static final int THIRD_IMAGE_VIEW_INDEX = 2;
+
     private static final String PROPERTY_ALPHA = "alpha";
 
     private final Handler mHandler;
@@ -47,9 +51,9 @@ public class KenBurnsView extends FrameLayout {
 
     private int mFadeInOutMs = 500;
 
-    private float maxScaleFactor = 1.5F;
+    private float mMaxScaleFactor = 1.5F;
 
-    private float minScaleFactor = 1.0F;
+    private float mMinScaleFactor = 1.0F;
 
     private int mPosition = 0;
 
@@ -68,7 +72,6 @@ public class KenBurnsView extends FrameLayout {
     private ImageView.ScaleType mScaleType = null;
 
     private static int sCachedSizeForLoadType;
-
 
     public KenBurnsView(Context context) {
         this(context, null);
@@ -109,7 +112,7 @@ public class KenBurnsView extends FrameLayout {
         }
 
         if (mActiveImageIndex == -1) {
-            mActiveImageIndex = 0;
+            mActiveImageIndex = FIRST_IMAGE_VIEW_INDEX;
             animate(mImageViews[mActiveImageIndex]);
             return;
         }
@@ -131,11 +134,11 @@ public class KenBurnsView extends FrameLayout {
         }
 
         if (mActiveImageIndex >= mImageViews.length) {
-            mActiveImageIndex = 0;
+            mActiveImageIndex = FIRST_IMAGE_VIEW_INDEX;
         }
 
         final ImageView activeImageView = mImageViews[mActiveImageIndex];
-        loadImage(mActiveImageIndex, mPosition);
+        loadImages(mPosition, mActiveImageIndex);
         activeImageView.setAlpha(0.0f);
 
         ImageView inactiveImageView = mImageViews[inactiveIndex];
@@ -152,27 +155,27 @@ public class KenBurnsView extends FrameLayout {
     }
 
     private int swapDirection(final int activeIndex, boolean isPrevious) {
-        if (activeIndex == 0) {
+        if (activeIndex == FIRST_IMAGE_VIEW_INDEX) {
             if (isPrevious) {
-                return 2;
+                return THIRD_IMAGE_VIEW_INDEX;
             } else {
-                return 1;
+                return SECOND_IMAGE_VIEW_INDEX;
             }
-        } else if (activeIndex == 1) {
+        } else if (activeIndex == SECOND_IMAGE_VIEW_INDEX) {
             if (isPrevious) {
-                return 0;
+                return FIRST_IMAGE_VIEW_INDEX;
             } else {
-                return 2;
+                return THIRD_IMAGE_VIEW_INDEX;
             }
 
-        } else if (activeIndex == 2) {
+        } else if (activeIndex == THIRD_IMAGE_VIEW_INDEX) {
             if (isPrevious) {
-                return 1;
+                return SECOND_IMAGE_VIEW_INDEX;
             } else {
-                return 0;
+                return FIRST_IMAGE_VIEW_INDEX;
             }
         }
-        return 0;
+        return FIRST_IMAGE_VIEW_INDEX;
     }
 
 
@@ -183,7 +186,7 @@ public class KenBurnsView extends FrameLayout {
         }
 
         if (mActiveImageIndex == -1) {
-            mActiveImageIndex = 0;
+            mActiveImageIndex = FIRST_IMAGE_VIEW_INDEX;
             animate(mImageViews[mActiveImageIndex]);
             return;
         }
@@ -192,7 +195,7 @@ public class KenBurnsView extends FrameLayout {
         mActiveImageIndex = (1 + mActiveImageIndex);
 
         if (mActiveImageIndex >= mImageViews.length) {
-            mActiveImageIndex = 0;
+            mActiveImageIndex = FIRST_IMAGE_VIEW_INDEX;
         }
 
         if (mLoopViewPager != null) {
@@ -206,7 +209,7 @@ public class KenBurnsView extends FrameLayout {
         }
 
         final ImageView activeImageView = mImageViews[mActiveImageIndex];
-        loadImage(mActiveImageIndex, mPosition);
+        loadImages(mPosition, mActiveImageIndex);
         activeImageView.setAlpha(0.0f);
 
         ImageView inactiveImageView = mImageViews[inactiveIndex];
@@ -238,7 +241,7 @@ public class KenBurnsView extends FrameLayout {
     }
 
     private float pickScale() {
-        return this.minScaleFactor + this.mRandom.nextFloat() * (this.maxScaleFactor - this.minScaleFactor);
+        return this.mMinScaleFactor + this.mRandom.nextFloat() * (this.mMaxScaleFactor - this.mMinScaleFactor);
     }
 
     private float pickTranslation(int value, float ratio) {
@@ -304,7 +307,7 @@ public class KenBurnsView extends FrameLayout {
         mRootLayout = (FrameLayout) view.findViewById(R.id.ken_burns_root);
     }
 
-    public void initStrings(List<String> strings) {
+    public void loadStrings(List<String> strings) {
         mLoadType = LoadType.String;
         sCachedSizeForLoadType = 0;
         mStrings = strings;
@@ -313,7 +316,7 @@ public class KenBurnsView extends FrameLayout {
         }
     }
 
-    public void initResourceIDs(List<Integer> resourceIDs) {
+    public void loadResourceIDs(List<Integer> resourceIDs) {
         mLoadType = LoadType.ResourceID;
         sCachedSizeForLoadType = 0;
         mResourceIDs = resourceIDs;
@@ -322,7 +325,7 @@ public class KenBurnsView extends FrameLayout {
         }
     }
 
-    public void initMixing(List<Object> mixingList) {
+    public void loadMixing(List<Object> mixingList) {
         mLoadType = LoadType.MIXING;
         sCachedSizeForLoadType = 0;
         mMixingList = mixingList;
@@ -352,15 +355,11 @@ public class KenBurnsView extends FrameLayout {
             root.addView(mImageViews[i]);
         }
 
-        loadImage(0, 0);
+        loadImages(0, FIRST_IMAGE_VIEW_INDEX);
     }
 
-    public ImageView[] getImages() {
-        return mImageViews;
-    }
-
-    private void loadImage(final int activeIndex, final int position) {
-        loadByGlide(position, activeIndex);
+    private void loadImages(final int position, final int activeIndex) {
+        loadImage(position, activeIndex);
 
         int prePosition  = position - 1;
         int nextPosition = position + 1;
@@ -373,36 +372,38 @@ public class KenBurnsView extends FrameLayout {
             nextPosition = 0;
         }
 
-        if (activeIndex == 0) {
-            if (position != prePosition) {
-                loadByGlide(prePosition, 2);
-            }
-            if (position != nextPosition) {
-                loadByGlide(nextPosition, 1);
-            }
-        } else if (activeIndex == 1) {
-            if (position != prePosition) {
-                loadByGlide(prePosition, 0);
-            }
-            if (position != nextPosition) {
-                loadByGlide(nextPosition, 2);
-            }
-        } else if (activeIndex == 2) {
-            if (position != prePosition) {
-                loadByGlide(prePosition, 1);
-            }
-            if (position != nextPosition) {
-                loadByGlide(nextPosition, 0);
-            }
+        switch (activeIndex) {
+            case FIRST_IMAGE_VIEW_INDEX:
+                if (position != prePosition) {
+                    loadImage(prePosition, THIRD_IMAGE_VIEW_INDEX);
+                }
+                if (position != nextPosition) {
+                    loadImage(nextPosition, SECOND_IMAGE_VIEW_INDEX);
+                }
+                break;
+            case SECOND_IMAGE_VIEW_INDEX:
+                if (position != prePosition) {
+                    loadImage(prePosition, FIRST_IMAGE_VIEW_INDEX);
+                }
+                if (position != nextPosition) {
+                    loadImage(nextPosition, THIRD_IMAGE_VIEW_INDEX);
+                }
+                break;
+            case THIRD_IMAGE_VIEW_INDEX:
+                if (position != prePosition) {
+                    loadImage(prePosition, SECOND_IMAGE_VIEW_INDEX);
+                }
+                if (position != nextPosition) {
+                    loadImage(nextPosition, FIRST_IMAGE_VIEW_INDEX);
+                }
+                break;
         }
     }
 
     private int getSizeByLoadType() {
-
         if (sCachedSizeForLoadType > 0) {
             return sCachedSizeForLoadType;
         }
-
         switch (mLoadType) {
             case String:
                 sCachedSizeForLoadType = mStrings.size();
@@ -417,7 +418,7 @@ public class KenBurnsView extends FrameLayout {
         return sCachedSizeForLoadType;
     }
 
-    private void loadByGlide(final int position, final int imageIndex) {
+    private void loadImage(final int position, final int imageIndex) {
         switch (mLoadType) {
             case String:
                 Glide.with(mContext).load(mStrings.get(position)).into(mImageViews[imageIndex]);
@@ -436,5 +437,21 @@ public class KenBurnsView extends FrameLayout {
                 }
                 break;
         }
+    }
+
+    public void setSwapMs(int mSwapMs) {
+        this.mSwapMs = mSwapMs;
+    }
+
+    public void setFadeInOutMs(int mFadeInOutMs) {
+        this.mFadeInOutMs = mFadeInOutMs;
+    }
+
+    public void setMaxScaleFactor(float mMaxScaleFactor) {
+        this.mMaxScaleFactor = mMaxScaleFactor;
+    }
+
+    public void setMinScaleFactor(float mMinScaleFactor) {
+        this.mMinScaleFactor = mMinScaleFactor;
     }
 }
