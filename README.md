@@ -81,8 +81,13 @@ dependencies {
 }
 ```
 
+## Develop
 
-## Release
+### 1.0.4
+ Easy to use
+
+
+## Released
 
 ### 1.0.3
 Delete unneeded resources.
@@ -100,7 +105,7 @@ Enable to mix. (Enable to load images from url & res)
 
 
 ## Detail Demo Movie
-[youtube](http://youtu.be/G2gJfT4tdnw)
+[youtube](https://youtu.be/kwZC1y0vWwg)
 
 
 ## Library
